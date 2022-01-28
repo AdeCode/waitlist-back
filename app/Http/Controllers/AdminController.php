@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\joinedWaitlist;
 use App\Models\Waitlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -17,14 +19,17 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|unique:users',           
+            'email' => 'required',           
         ]);
         $waitlist = Waitlist::create($request->all());
+        $email = $waitlist['email'];
         if($waitlist)
         {
+            //$waitlist->Mail::send(new joinedWaitlist());
+            //Mail::to($email)->send(new joinedWaitlist($email));
             return response()->json(['message'=>'waitlist added successfully', 'user' => $waitlist]);
         }else{
-            return ["message" => "Operatrion failed"]; 
+            return ["message" => "Operation failed"]; 
         }
     }
 }
